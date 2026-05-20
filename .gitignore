@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+grafana-data/
+prometheus-data/
+.DS_Store
+bandit-report.json
+trivy-report.json

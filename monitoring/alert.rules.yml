@@ -1,0 +1,63 @@
+groups:
+  - name: security_alerts
+    rules:
+
+      # Alert when brute force attacks detected
+      - alert: BruteForceDetected
+        expr: increase(security_attack_attempts_total{attack_type="brute_force"}[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Brute force attack detected"
+          description: "A brute force attack has been detected from IP {{ $labels.ip }}"
+
+      # Alert when multiple IPs get blocked
+      - alert: MultipleIPsBlocked
+        expr: security_blocked_ips_total > 5
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Multiple IPs blocked"
+          description: "{{ $value }} IPs have been blocked due to suspicious activity"
+
+      # Alert when rate limit exceeded frequently
+      - alert: RateLimitExceeded
+        expr: increase(security_suspicious_requests_total{reason="rate_limit"}[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High rate of rate-limit violations"
+          description: "More than 10 rate-limit violations in last 5 minutes - possible DDoS"
+
+      # Alert on SQL injection attempts
+      - alert: SQLInjectionAttempt
+        expr: increase(security_suspicious_requests_total{reason="sql_injection"}[1m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "SQL injection attempt detected"
+          description: "SQL injection attempt detected in incoming requests"
+
+      # Alert when app goes down
+      - alert: AppDown
+        expr: up{job="flask-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Flask app is down"
+          description: "The Flask application has been unreachable for more than 1 minute"
+
+      # Alert on high latency
+      - alert: HighRequestLatency
+        expr: rate(app_request_latency_seconds_sum[5m]) / rate(app_request_latency_seconds_count[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request latency"
+          description: "Average request latency is above 1 second"
