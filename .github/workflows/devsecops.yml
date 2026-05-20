@@ -6,30 +6,27 @@ branches:
 - main
 
 jobs:
-security-and-testing:
+test-security:
 runs-on: ubuntu-latest
 
 ```
 steps:
-- name: Checkout Code
-  uses: actions/checkout@v4
+  - name: Checkout Code
+    uses: actions/checkout@v4
 
-- name: Setup Python
-  uses: actions/setup-python@v5
-  with:
-    python-version: '3.11'
+  - name: Setup Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.11'
 
-- name: Install Dependencies
-  run: |
-    pip install -r app/requirements.txt
-    pip install pytest bandit
+  - name: Install Dependencies
+    run: |
+      pip install -r app/requirements.txt
+      pip install pytest bandit
 
-- name: Run Tests
-  run: pytest
+  - name: Run Tests
+    run: pytest
 
-- name: Run Bandit Scan
-  run: bandit -r app/
-
-- name: Build Docker Image
-  run: docker build -t secure-flow ./app
+  - name: Run Bandit Security Scan
+    run: bandit -r app/
 ```
