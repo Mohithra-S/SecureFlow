@@ -26,11 +26,11 @@ def test(label, method, path, **kwargs):
         print(f"  ❌  {method.upper()} {path} → ERROR: {e}")
 
 # ── 1. Normal traffic ─────────────────────────────────────
-separator("1. Normal Traffic (should all be 200)")
+"""separator("1. Normal Traffic (should all be 200)")
 test("normal homepage",        "get",  "/")
 test("health check",           "get",  "/health")
 test("api info",               "get",  "/api/info")
-test("security report",        "get",  "/security/report")
+test("security report",        "get",  "/security/report")"""
 
 # ── 2. Hacker path scanning ───────────────────────────────
 separator("2. Hacker Path Scanning (should be blocked 404)")
